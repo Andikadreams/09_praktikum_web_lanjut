@@ -29,6 +29,9 @@
                         <td>{{$M->matakuliah->semester}}</td>
                         <td>{{$M->nilai}}</td>
                     @endforeach
+                    </table><br>
+                    <center><a class="btn btn-success btn-lg" href="{{ route('cetak_pdf',$Mahasiswa->Nim) }}">Cetak ke PDF</a></center>
+                    <br>
                     </tr>
                 </table>
             </div>

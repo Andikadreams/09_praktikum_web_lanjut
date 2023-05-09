@@ -34,6 +34,13 @@
                         <input type="text" name="Nama" class="form-control" id="Nama" value="{{ $mahasiswa->Nama }}"
                             aria-describedby="Nama">
                     </div>
+                    <!-- Edit Tugas praktikum 10 -->
+                    <div class="form-group">
+                            <label for="image">Foto</label>
+                            <input type="file" class="form-control" required="required" name="image" value="{{$mahasiswa->Foto}}"></br>
+                            <img width="150px" src="{{asset('storage/'.$mahasiswa->Foto)}}">
+                    </div>
+                    <!-- ----------------------- -->
                     <div class="form-group">
                         <label for="Kelas">Kelas</label>
                         <select name="Kelas" class="form-control">

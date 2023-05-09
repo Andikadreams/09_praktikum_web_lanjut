@@ -28,18 +28,24 @@
     <tr>
         <th>Nim</th>
         <th>Nama</th>
+        <!-- Edit Tugas praktikum 10 -->
+        <th>Foto</th>
+        <!-- ----------------------- -->
         <th>Kelas</th>
         <th>Jurusan</th>
         <th>No_Handphone</th>
-        <th width="200px">Email</th>
+        <th>Email</th>
         <th>TTL</th>
-        <th width="290px">Action</th>
+        <th width="350px">Action</th>
     </tr>
     @foreach ($mahasiswas as $Mahasiswa)
     <tr>
 
         <td>{{ $Mahasiswa->Nim }}</td>
         <td>{{ $Mahasiswa->Nama }}</td>
+        <!-- Edit Tugas praktikum 10 -->
+        <td><img width="100px" src="{{asset('storage/'.$Mahasiswa->Foto)}}"></td>
+        <!-- ----------------------- -->
         <td>{{ $Mahasiswa->Kelas->nama_kelas }}</td>
         <td>{{ $Mahasiswa->Jurusan }}</td>
         <td>{{ $Mahasiswa->No_Handphone }}</td>
@@ -59,7 +65,7 @@
     </tr>
     @endforeach
 </table>
-<div class="my-2" width="290px">
+<div class="my-2" width="500px">
 {{$mahasiswas->links()}}
 </div>
 @endsection

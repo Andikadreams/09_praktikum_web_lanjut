@@ -7,6 +7,9 @@ use App\Models\Mahasiswa_Matakuliah;
 use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\PDF;
+
 
 class MahasiswaController extends Controller
 {
@@ -43,6 +46,10 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
+        // Edit untuk Tugas Praktikum 10
+        if ($request->file('image')) {
+            $image_name = $request->file('image')->store('image', 'public');
+        }
         //melakukan validasi data
         $request->validate([
         'Nim' => 'required',
@@ -60,6 +67,10 @@ class MahasiswaController extends Controller
         $mahasiswa =  new Mahasiswa;
         $mahasiswa -> Nim =$request->get('Nim');
         $mahasiswa -> Nama =$request->get('Nama');
+        // Edit untuk Tugas Praktikum 10
+        // start Praktikum 10 TUGAS
+        $mahasiswa -> Foto =$image_name;
+        // end
         $mahasiswa -> Jurusan =$request->get('Jurusan');
         $mahasiswa -> No_Handphone =$request->get('No_Handphone');
         $mahasiswa -> Email =$request->get('Email');
@@ -127,9 +138,22 @@ class MahasiswaController extends Controller
         // Mahasiswa::find($Nim)->update($request->all());
 
         //fungsi eloquent untuk mengupdate data inputan kita Prak 9
-        $mahasiswa = Mahasiswa::find($Nim);
+
+        // Edit untuk Tugas Praktikum 10
+        $mahasiswa = Mahasiswa::with('kelas')->where('Nim', $Nim)->first();
+            if ($mahasiswa->Foto && file_exists(storage_path('app/public/' .$mahasiswa->Foto))) {
+                Storage::delete('public/' .$mahasiswa->Foto);
+            }
+        // -------------------------
+        // Edit untuk Tugas Praktikum 10
+        $image_name = $request->file('image')->store('images', 'public');
+        // -------------------------
+        // $mahasiswa = Mahasiswa::find($Nim);
         $mahasiswa -> Nim =$request->get('Nim');
         $mahasiswa -> Nama =$request->get('Nama');
+        // Edit untuk Tugas Praktikum 10
+        $mahasiswa->Foto=$image_name;
+        // -------------------------
         $mahasiswa -> Jurusan =$request->get('Jurusan');
         $mahasiswa -> No_Handphone =$request->get('No_Handphone');
         $mahasiswa -> Email =$request->get('Email');
@@ -181,6 +205,14 @@ class MahasiswaController extends Controller
         //$MataKuliah = $Mahasiswa->MataKuliah()->get();
         $Mahasiswa_Matakuliah = Mahasiswa_Matakuliah::where('mahasiswa_id','=',$Nim)->get();
         return view('mahasiswas.nilai',['Mahasiswa' => $Mahasiswa],['Mahasiswa_Matakuliah' => $Mahasiswa_Matakuliah],['Matakuliah' => $Matakuliah], compact('Mahasiswa_Matakuliah'));
+    }
+
+    public function cetak_pdf($Nim){
+        $Mahasiswa = Mahasiswa::find($Nim);
+        $Matakuliah = Matakuliah::all();
+        $MahasiswaMataKuliah = Mahasiswa_MataKuliah::where('mahasiswa_id','=',$Nim)->get();
+        $pdf = PDF::loadview('mahasiswas.nilai_pdf', compact('Mahasiswa','MahasiswaMataKuliah'));
+        return $pdf->stream();
     }
 
 };

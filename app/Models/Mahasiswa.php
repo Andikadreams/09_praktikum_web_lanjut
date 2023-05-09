@@ -22,6 +22,7 @@ class Mahasiswa extends Model //Definisi Model
     protected $fillable = [
     'Nim',
     'Nama',
+    'Foto',
     'kelas_id',
     'Jurusan',
     'No_Handphone',
