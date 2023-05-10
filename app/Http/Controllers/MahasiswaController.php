@@ -212,7 +212,7 @@ class MahasiswaController extends Controller
         $Matakuliah = Matakuliah::all();
         $MahasiswaMataKuliah = Mahasiswa_MataKuliah::where('mahasiswa_id','=',$Nim)->get();
         $pdf = PDF::loadview('mahasiswas.nilai_pdf', compact('Mahasiswa','MahasiswaMataKuliah'));
-        return $pdf->stream();
+        return $pdf->download($Mahasiswa->Nama .'-'. $Mahasiswa->Nim .'.pdf');
     }
 
 };
